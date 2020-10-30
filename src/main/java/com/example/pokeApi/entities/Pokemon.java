@@ -1,11 +1,16 @@
 package com.example.pokeApi.entities;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.annotation.Id;
 
 import java.util.List;
 
 @Data
+@Slf4j
+@AllArgsConstructor
+
 public class Pokemon {
     //id's in MongoDb are stored as ObjectIds (uuid)
     @Id
@@ -18,5 +23,9 @@ public class Pokemon {
 
     public Pokemon(){
 
+    }
+
+
+    public Pokemon(String id, Object species, int weight, int height, List<Object> abilities) {
     }
 }

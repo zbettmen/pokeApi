@@ -22,7 +22,7 @@ public class AuthenticationEntryPoint extends BasicAuthenticationEntryPoint {
 
     @Override
     public void afterPropertiesSet() {
-        setRealmName("PokeLand");
+        setRealmName("Rijad Omars");
         super.afterPropertiesSet();
     }
 }

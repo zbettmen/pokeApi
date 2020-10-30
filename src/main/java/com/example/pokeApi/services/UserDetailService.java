@@ -28,10 +28,9 @@ public class UserDetailService implements UserDetailsService {
                 user.getPassword(), getGrantedAuthorities(user));
     }
 
-    //gets all the roles a user can have
     private Collection<GrantedAuthority> getGrantedAuthorities(User user) {
-        return user.getRoles().stream()
-                .map(role -> new SimpleGrantedAuthority("ROLE_" + role)) //ROLE_ADMIN
+        return user.getAcl().stream()
+                .map(authority -> new SimpleGrantedAuthority("ROLE_" + authority))
                 .collect(Collectors.toList());
     }
 

@@ -22,6 +22,9 @@ public class PokemonService {
     @Autowired
     PokemonRepository pokemonRepository;
 
+
+
+
     public PokemonService(RestTemplateBuilder restTemplateBuilder) {
         this.restTemplate = restTemplateBuilder.build();
     }
@@ -45,8 +48,8 @@ public class PokemonService {
             } //if found create new pokemon and save to db
             else {
                 var newPokemon = new Pokemon(
+
                         pokemonDto.getId(),
-                        pokemonDto.getName(),
                         pokemonDto.getSpecies(),
                         pokemonDto.getWeight(),
                         pokemonDto.getHeight(),

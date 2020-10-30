@@ -1,9 +1,10 @@
-package com.inl2.Biblans.services;
+package com.example.pokeApi.services;
 
 
-import com.inl2.Biblans.entities.User;
-import com.inl2.Biblans.reposotories.BookRepo;
-import com.inl2.Biblans.reposotories.UserRepo;
+
+import com.example.pokeApi.entities.User;
+import com.example.pokeApi.repositories.PokemonRepository;
+import com.example.pokeApi.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -13,7 +14,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.server.ResponseStatusException;
 
-
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,8 +22,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 
 public class UserService {
-    private final BookRepo bookRepository;
-    private final UserRepo userRepository;
+    private final PokemonRepository bookRepository;
+    private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
     @GetMapping
