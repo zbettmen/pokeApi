@@ -156,7 +156,7 @@ public class PokemonService {
         pokemonRepository.save(pokemon);
     }
 
-    @CacheEvict(value = "wheelCache", key = "#id")
+    @CacheEvict(value = "pokemonCache", key = "#id")
     public void delete(String id) {
         if(!pokemonRepository.existsById(id)){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND,
