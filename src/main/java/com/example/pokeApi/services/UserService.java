@@ -1,62 +1,58 @@
-package com.example.pokeApi.services;
+package com.inl2.Biblans.services;
 
 
-import com.example.pokeApi.entities.User;
-import com.example.pokeApi.repositories.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.inl2.Biblans.entities.User;
+import com.inl2.Biblans.reposotories.BookRepo;
+import com.inl2.Biblans.reposotories.UserRepo;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.server.ResponseStatusException;
 
+
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
+@Slf4j
+@RequiredArgsConstructor
+
 public class UserService {
+    private final BookRepo bookRepository;
+    private final UserRepo userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    @Autowired
-    private UserRepository userRepository;
+    @GetMapping
+    public List<User> findAll(String user){
+        var users = userRepository.findAll();
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    public List<User> findAll(String username) {
-        if(username != null){
-            return (List<User>) userRepository.findByUsername(username).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Could not find the user by username %s.", username)));
+        if(user!=null){
+            users = users.stream()
+                    .filter(b -> b.getUsername()
+                            .toLowerCase()
+                            .contains(user.toLowerCase()))
+                    .collect(Collectors.toList());
         }
-        return userRepository.findAll();
+
+        return users;
     }
 
-    public User findById(String id) {
-        return userRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Could not find the user by id %s.", id)));
+    public User findByUsername(String username) {
+        return userRepository.findByUsername(username).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
     }
 
-    public User findByUsername(String username){
-        return userRepository.findByUsername(username).orElseThrow(RuntimeException::new);
-    }
-
+    @PutMapping
     public User save(User user){
-        if(user.getPassword() == null){
-            throw new ResponseStatusException(HttpStatus.I_AM_A_TEAPOT, "I need a password!");
+        if(user == null){
+            throw new ResponseStatusException(HttpStatus.NO_CONTENT);
+
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
     }
-
-    public void update(String id, User user){
-        if(!userRepository.existsById(id)){
-            throw new RuntimeException();
-        }
-        user.setId(id);
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        userRepository.save(user);
-    }
-
-    public void delete(String id){
-        if(!userRepository.existsById(id)){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Could not find the user by id %s.", id));
-        }
-        userRepository.deleteById(id);
-    }
-
 }

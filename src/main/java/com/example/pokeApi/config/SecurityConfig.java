@@ -1,7 +1,7 @@
-package com.example.pokeApi.config;
+package com.inl2.Biblans.config;
 
 
-import com.example.pokeApi.services.UserDetailService;
+import com.inl2.Biblans.services.UserDetailServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,40 +16,37 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(securedEnabled = true) //we use @Secured in the controller - so we activate it here
+@EnableGlobalMethodSecurity(securedEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+    @Autowired
+    private AuthenticationEntryPoint entryPoint;
 
     @Autowired
-    private AuthenticationEntryPoint entrypoint;
+    private UserDetailServices userDetailService;
 
-    @Autowired
-    private UserDetailService userDetailService;
-
-    @Autowired
-    public void configure(AuthenticationManagerBuilder auth) throws Exception{
-        auth.inMemoryAuthentication()
-                .withUser("admin")
-                .password(passwordEncoder().encode("password")) //admin:password https://www.base64encode.org/ Basic + result from website
-                .roles("USER");
+    @Override
+    protected void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
+        authenticationManagerBuilder.userDetailsService(userDetailService);
     }
 
     @Override
-    protected void configure(HttpSecurity httpSecurity) throws Exception{
+    protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
-                .csrf().disable()
                 .formLogin().disable()
-                //.authorizeRequests().anyRequest().authenticated()
-                .authorizeRequests().antMatchers("/open").permitAll()
-                .antMatchers("/api/**").authenticated()
+                .csrf().disable()
+                .authorizeRequests()
+                       .antMatchers("/api/v1/books/findall/**").permitAll()
+                       .antMatchers("/api/v1/users/start/**").permitAll()
+                       .antMatchers("/**").authenticated()
                 .and()
-                .httpBasic().authenticationEntryPoint(entrypoint)
+                .httpBasic().authenticationEntryPoint(entryPoint)
                 .and()
                 .logout(l -> l.logoutSuccessUrl("/"));
+
     }
 
     @Bean
     public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
     }
-
 }
