@@ -1,5 +1,6 @@
 package com.example.pokeApi.entities;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -10,7 +11,6 @@ import java.util.List;
 @Data
 @Slf4j
 @AllArgsConstructor
-
 public class Pokemon {
     //id's in MongoDb are stored as ObjectIds (uuid)
     @Id
