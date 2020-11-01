@@ -1,7 +1,9 @@
 package com.example.pokeApi.services;
 
 
+
 import com.example.pokeApi.entities.User;
+import com.example.pokeApi.repositories.PokemonRepository;
 import com.example.pokeApi.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +20,9 @@ import java.util.stream.Collectors;
 @Service
 @Slf4j
 @RequiredArgsConstructor
+
 public class UserService {
+    private final PokemonRepository bookRepository;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
