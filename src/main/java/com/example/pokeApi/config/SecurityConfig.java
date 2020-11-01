@@ -37,7 +37,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .formLogin().disable()
                 .csrf().disable()
                 .authorizeRequests()
-                       .antMatchers("/api/v1/pokemon/findall/**").permitAll()
+              .antMatchers("/api/v1/pokemon/findAll/**").permitAll()
+
                        .antMatchers("/api/v1/users/start/**").permitAll()
                        .antMatchers("/**").authenticated()
                 .and()

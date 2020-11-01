@@ -7,6 +7,12 @@ import com.example.pokeApi.services.PokemonService;
 import com.example.pokeApi.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 
+
+
+
+import org.springframework.http.HttpStatus;
+
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 
@@ -33,5 +39,12 @@ public class UserController {
         @GetMapping
         public ResponseEntity<List<User>> findAll(@RequestParam(required = false) String name){
             return ResponseEntity.ok(userService.findAll(name));
+        }
+
+        @Secured({"ROLE_ADMIN",  "ROLE_USER"})
+        @PutMapping("/{id}")
+        @ResponseStatus(HttpStatus.NO_CONTENT)
+        public void updateUser(@PathVariable String id, @RequestBody User user) {
+                userService.update(id, user);
         }
 }
