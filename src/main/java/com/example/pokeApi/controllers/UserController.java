@@ -4,11 +4,10 @@ package com.example.pokeApi.controllers;
 import com.example.pokeApi.entities.User;
 import com.example.pokeApi.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-<<<<<<< HEAD
+
 
 import org.springframework.http.HttpStatus;
-=======
->>>>>>> 3ee2e80f9aa0951c095eb7eb861e5f4f974294ac
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
