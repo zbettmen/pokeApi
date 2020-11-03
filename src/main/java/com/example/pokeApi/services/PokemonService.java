@@ -69,11 +69,12 @@ public class PokemonService {
         return pokemonRepository.save(pokemon);
     }
 
+    @Cacheable(cacheNames = "pokemonCache",key = "#id",value = "pokemonCache")
     public Pokemon findById(String id){
         return pokemonRepository.findById(id).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND, "No pokemon found."));
     }
-    @Cacheable(value = "pokemonCache")
+    @Cacheable(cacheNames = "pokemonCache",key = "#id",value = "pokemonCache")
     public List<Pokemon> findAll(String weight,String height,String name){
         var pokemons = pokemonRepository.findAll();
 
@@ -105,7 +106,7 @@ public class PokemonService {
         return pokemons;
 
     }
-    @CacheEvict(value = "pokemonCache", key = "#id")
+    @CacheEvict(cacheNames = "pokemonCache",value = "pokemonCache", key = "#id")
     public void delete(String id) {
         if(!pokemonRepository.existsById(id)){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND,
