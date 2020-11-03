@@ -47,4 +47,11 @@ public class UserController {
         public void updateUser(@PathVariable String id, @RequestBody User user) {
                 userService.update(id, user);
         }
+
+        @Secured("ROLE_ADMIN")
+        @DeleteMapping("/{id}")
+        @ResponseStatus(HttpStatus.NO_CONTENT)
+        public void deleteUser(@PathVariable String id) {
+                userService.delete(id);
+        }
 }

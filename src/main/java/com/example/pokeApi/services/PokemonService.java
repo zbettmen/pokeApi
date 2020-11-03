@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -73,11 +74,11 @@ public class PokemonService {
 
     @Cacheable(value = "pokemonCache", key = "#id")
     public Pokemon findById(String id){
-        return pokemonRepository.findById(id).orElseThrow(() ->
+        return (Pokemon) pokemonRepository.findById(id).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND, "No pokemon found."));
     }
     @Cacheable(value = "pokemonCache")
-    public List<Pokemon> findAll(String weight,String height,String name){
+    public List<Pokemon> findAll(String weight,String height,String name,String abilities){
         log.info("Request to find all pokemons.");
         log.info("Fresh pokemon data...");
         var pokemons = pokemonRepository.findAll();
@@ -94,8 +95,6 @@ public class PokemonService {
             if (pokemons.isEmpty()) {
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Could not find any pokemon in your database.");
             }
-
-
         }
         if (name != null){
             pokemons = pokemons.stream().filter(p -> p.getName().contains(name.toLowerCase())).collect(Collectors.toList());
@@ -103,12 +102,8 @@ public class PokemonService {
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Could not find any pokemon in your database.");
 
             }
-
-
         }
-
         return pokemons;
-
     }
     @CacheEvict(value = "pokemonCache", key = "#id")
     public void delete(String id) {
@@ -119,7 +114,9 @@ public class PokemonService {
         pokemonRepository.deleteById(id);
     }
 
+    @CachePut(value = "pokemonCache", key = "#id")
     public void update(String id, Pokemon pokemon){
+        log.info("Pokemon update with new name");
         if(!pokemonRepository.existsById(id)){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }

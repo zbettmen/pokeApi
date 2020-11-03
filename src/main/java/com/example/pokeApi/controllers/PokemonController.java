@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
+
 import java.util.List;
 
 @RestController
@@ -26,13 +27,15 @@ public class PokemonController {
     public ResponseEntity<List<Pokemon>> findAll(
             @RequestParam(required = false) String weight,
             @RequestParam(required = false) String height,
-            @RequestParam(required = false) String name) {
-        return ResponseEntity.ok(pokemonService.findAll(weight, height, name));
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) String id) {
 
+        return ResponseEntity.ok(pokemonService.findAll(weight, height, name, id));
 
     }
+
     @GetMapping("/api")
-    public ResponseEntity<List<PokemonInfo>> getAllPokemonsAvailable(){
+    public ResponseEntity<List<PokemonInfo>> getAllPokemonsAvailable() {
         List<PokemonInfo> pokemonsAvailable = pokemonApiService.getAllPokemonsAvailable();
         return ResponseEntity.ok(pokemonsAvailable);
     }
@@ -40,13 +43,14 @@ public class PokemonController {
     @Secured("ROLE_ADMIN")
     @DeleteMapping("{id}")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public void deleteBook(@PathVariable @RequestBody String id) {
+    public void deletePokemon(@PathVariable @RequestBody String id) {
         try {
             pokemonService.delete(id);
         } catch (NumberFormatException ex) {
 
         }
     }
+
     @Secured("ROLE_ADMIN")
     @GetMapping("/{name}")
     public ResponseEntity<List<Pokemon>> findPokemon(@PathVariable String name) {
@@ -57,8 +61,8 @@ public class PokemonController {
     @Secured({"ROLE_ADMIN"})
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void update( @PathVariable String id, @RequestBody   Pokemon pokemon){
-        pokemonService.update(id,pokemon);
+    public void update(@PathVariable String id, @RequestBody Pokemon pokemon) {
+        pokemonService.update(id, pokemon);
     }
 
 

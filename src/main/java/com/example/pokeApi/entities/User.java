@@ -16,15 +16,6 @@ import java.util.List;
 @Slf4j
 @Data
 public class User  {
-
-    public User(String username, String password) {
-        this.username = username;
-        this.password = password;
-    }
-
-    public User() {
-    }
-
     @Id
     private String userId;
     private String username;

@@ -7,6 +7,8 @@ import com.example.pokeApi.repositories.PokemonRepository;
 import com.example.pokeApi.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -47,7 +49,8 @@ public class UserService {
 
     }
 
-    @PutMapping
+
+    @CachePut(value = "userCache", key = "#result.id")
     public User save(User user) {
         if (user == null) {
             throw new ResponseStatusException(HttpStatus.NO_CONTENT);
@@ -57,7 +60,14 @@ public class UserService {
         return userRepository.save(user);
     }
 
-
+    @CacheEvict(value = "userCache", key = "#id")
+    public void delete(String id) {
+        if(!userRepository.existsById(id)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, // 404 -> Not found
+                    String.format("Could not find the user by id %s.", id));
+        }
+        userRepository.deleteById(id);
+    }
 
 
 

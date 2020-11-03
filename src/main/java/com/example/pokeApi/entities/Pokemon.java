@@ -11,7 +11,6 @@ import java.util.List;
 @Data
 @Slf4j
 @AllArgsConstructor
-
 public class Pokemon {
 
     @Id
@@ -22,11 +21,8 @@ public class Pokemon {
     private int height;
     private List<Object> abilities;
 
-    public Pokemon(){
-
-    }
 
 
-    public Pokemon(String id, Object species, int weight, int height, List<Object> abilities) {
-    }
+
+
 }
