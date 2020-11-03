@@ -22,10 +22,6 @@ public class PokemonController {
     @Autowired
     PokemonApiService pokemonApiService;
 
-
-
-
-
     @GetMapping("/open")
     public ResponseEntity<List<Pokemon>> findAll(
             @RequestParam(required = false) String weight,
@@ -56,6 +52,13 @@ public class PokemonController {
     public ResponseEntity<List<Pokemon>> findPokemon(@PathVariable String name) {
         List<Pokemon> pokemons = pokemonService.search(name);
         return ResponseEntity.ok(pokemons);
+    }
+
+    @Secured({"ROLE_ADMIN"})
+    @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void update( @PathVariable String id, @RequestBody   Pokemon pokemon){
+        pokemonService.update(id,pokemon);
     }
 
 
