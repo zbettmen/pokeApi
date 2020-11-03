@@ -12,4 +12,6 @@ public interface PokemonRepository extends MongoRepository<Pokemon, String> {
 
     public List<Pokemon> findAllByName(String name);
 
+
+
 }

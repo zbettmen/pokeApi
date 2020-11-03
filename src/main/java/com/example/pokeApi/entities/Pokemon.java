@@ -11,8 +11,9 @@ import java.util.List;
 @Data
 @Slf4j
 @AllArgsConstructor
+
 public class Pokemon {
-    //id's in MongoDb are stored as ObjectIds (uuid)
+
     @Id
     private String id;
     private String name;
