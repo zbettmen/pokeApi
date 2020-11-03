@@ -119,6 +119,14 @@ public class PokemonService {
         pokemonRepository.deleteById(id);
     }
 
+    public void update(String id, Pokemon pokemon){
+        if(!pokemonRepository.existsById(id)){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+        pokemon.setId(id);
+        pokemonRepository.save(pokemon);
+    }
+
 }
 
 
