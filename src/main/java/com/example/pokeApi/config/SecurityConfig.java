@@ -1,7 +1,6 @@
 package com.example.pokeApi.config;
 
 
-
 import com.example.pokeApi.services.UserDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -37,11 +36,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .formLogin().disable()
                 .csrf().disable()
                 .authorizeRequests()
-              .antMatchers("/api/v1/pokemon/findAll/**").permitAll()
+                .antMatchers("/api/v1/pokemon/findAll/**").permitAll()
 
-                       .antMatchers("/api/v1/users/start/**").permitAll()
-                        .antMatchers("/rest/v1/pokemon/open").permitAll()
-                       .antMatchers("/**").authenticated()
+                .antMatchers("/api/v1/users/start/**").permitAll()
+                .antMatchers("/rest/v1/pokemon/open").permitAll()
+                .antMatchers("/rest/v1/pokemon/api").permitAll()
+                .antMatchers("/**").authenticated()
                 .and()
                 .httpBasic().authenticationEntryPoint(entryPoint)
                 .and()
@@ -50,7 +50,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder(){
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 }

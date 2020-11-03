@@ -3,6 +3,7 @@ package com.example.pokeApi.services;
 
 import com.example.pokeApi.entities.Pokemon;
 import com.example.pokeApi.repositories.PokemonRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -19,6 +20,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @ConfigurationProperties(value = "pokemon.url", ignoreUnknownFields = false)
 public class PokemonService {
@@ -69,12 +71,15 @@ public class PokemonService {
         return pokemonRepository.save(pokemon);
     }
 
+    @Cacheable(value = "pokemonCache", key = "#id")
     public Pokemon findById(String id){
         return pokemonRepository.findById(id).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND, "No pokemon found."));
     }
     @Cacheable(value = "pokemonCache")
     public List<Pokemon> findAll(String weight,String height,String name){
+        log.info("Request to find all pokemons.");
+        log.info("Fresh pokemon data...");
         var pokemons = pokemonRepository.findAll();
 
 
