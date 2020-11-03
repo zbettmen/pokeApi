@@ -6,8 +6,10 @@ import com.example.pokeApi.repositories.PokemonApiRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -20,20 +22,25 @@ public class PokemonApiService {
     public PokemonApiService(RestTemplateBuilder restTemplateBuilder) {
         this.restTemplate = restTemplateBuilder.build();
     }
+
     @Autowired
     PokemonApiRepository pokemonApiRepository;
 
     @Cacheable(value = "pokemonCache")
     public List<PokemonInfo> getAllPokemonsAvailable() {
-        List<PokemonInfo> pokemonsBaseInfoFromDB = pokemonApiRepository.findAll();
-        if (pokemonsBaseInfoFromDB.isEmpty()) {
+        List<PokemonInfo> pokemonsInfoFromDB = pokemonApiRepository.findAll();
+        if (pokemonsInfoFromDB.isEmpty()) {
             PokemonList response = restTemplate.getForObject(POKEMONS_URL, PokemonList.class);
             List<PokemonInfo> pokemonList = response.getResults();
             for (var p : pokemonList) {
                 pokemonApiRepository.save(p);
+
             }
+
             return pokemonList;
         }
-        return pokemonsBaseInfoFromDB;
+        return pokemonsInfoFromDB;
     }
+
+
 }

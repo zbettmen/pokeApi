@@ -23,11 +23,7 @@ public class PokemonController {
     PokemonApiService pokemonApiService;
 
 
-    @GetMapping("/{name}")
-    public ResponseEntity<List<Pokemon>> findPokemon(@PathVariable String name) {
-        List<Pokemon> pokemons = pokemonService.search(name);
-        return ResponseEntity.ok(pokemons);
-    }
+
 
 
     @GetMapping("/open")
@@ -38,6 +34,11 @@ public class PokemonController {
         return ResponseEntity.ok(pokemonService.findAll(weight, height, name));
 
 
+    }
+    @GetMapping("/api")
+    public ResponseEntity<List<PokemonInfo>> getAllPokemonsAvailable(){
+        List<PokemonInfo> pokemonsAvailable = pokemonApiService.getAllPokemonsAvailable();
+        return ResponseEntity.ok(pokemonsAvailable);
     }
 
     @Secured("ROLE_ADMIN")
@@ -50,11 +51,11 @@ public class PokemonController {
 
         }
     }
-
-    @GetMapping("/api")
-    public ResponseEntity<List<PokemonInfo>> getAllPokemonsAvailable(){
-        List<PokemonInfo> pokemonsAvailable = pokemonApiService.getAllPokemonsAvailable();
-        return ResponseEntity.ok(pokemonsAvailable);
+    @Secured("ROLE_ADMIN")
+    @GetMapping("/{name}")
+    public ResponseEntity<List<Pokemon>> findPokemon(@PathVariable String name) {
+        List<Pokemon> pokemons = pokemonService.search(name);
+        return ResponseEntity.ok(pokemons);
     }
 
 
