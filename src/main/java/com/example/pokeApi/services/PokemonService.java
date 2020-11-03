@@ -71,11 +71,7 @@ public class PokemonService {
         return pokemonRepository.save(pokemon);
     }
 
-<<<<<<< HEAD
-    @Cacheable(cacheNames = "pokemonCache",key = "#id",value = "pokemonCache")
-=======
     @Cacheable(value = "pokemonCache", key = "#id")
->>>>>>> 8e95fb4589e97e99d3dac8c26f7b48c2d43b0a70
     public Pokemon findById(String id){
         return pokemonRepository.findById(id).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND, "No pokemon found."));
