@@ -62,24 +62,24 @@ public class UserService {
 
 
 
-    public void update(String id, User user){
+    public void update(String id, User user) {
         var isAdmin = SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream()
                 .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().toUpperCase().equals("ROLE_ADMIN"));
         var isCurrentUser = SecurityContextHolder.getContext().getAuthentication()
                 .getName().toLowerCase().equals(user.getUsername().toLowerCase());
-        if (!isAdmin && !isCurrentUser){
-            log.warn("Attempt to update another user made.");
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "You can only update yourself");
+        if (!isAdmin && !isCurrentUser) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "You can only update your own details. Admin can update all users.");
         }
-        if (!userRepository.existsById(id)){
-            log.error("Couldn't find the user you were looking for.");
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND,String.format("Could not find user with id %s",id));
-        }
-        if (user.getPassword().length() <= 16){
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
+        if (!userRepository.existsById(id)) {
+            log.error(String.format("Could not find the user by id %s.", id));
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, // 404 -> Not found
+                    String.format("Could not find the user by id %s.", id));
         }
         user.setUserId(id);
-        userRepository.save(user);
-    }
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
 
+
+        userRepository.save(user);
+
+    }
 }
