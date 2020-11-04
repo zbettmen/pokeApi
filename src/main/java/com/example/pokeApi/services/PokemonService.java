@@ -68,11 +68,13 @@ public class PokemonService {
     }
 
     public Pokemon save(Pokemon pokemon){
+        log.info("adding pokemon with id - {}", pokemon.getId());
         return pokemonRepository.save(pokemon);
     }
 
     @Cacheable(value = "pokemonCache", key = "#id")
     public Pokemon findById(String id){
+        log.info("fetching pokemon from db");
         return pokemonRepository.findById(id).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND, "No pokemon found."));
     }
@@ -124,13 +126,7 @@ public class PokemonService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
         pokemon.setId(id);
+        log.info("pokemon updated with new name");
         pokemonRepository.save(pokemon);
     }
-
 }
-
-
-
-
-
-

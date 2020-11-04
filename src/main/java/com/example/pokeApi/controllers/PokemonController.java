@@ -40,11 +40,11 @@ public class PokemonController {
     @Secured("ROLE_ADMIN")
     @DeleteMapping("{id}")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public void deleteBook(@PathVariable @RequestBody String id) {
+    public void deletePokemon(@PathVariable @RequestBody String id) {
         try {
             pokemonService.delete(id);
         } catch (NumberFormatException ex) {
-
+            ex.getStackTrace();
         }
     }
     @Secured("ROLE_ADMIN")
@@ -52,6 +52,13 @@ public class PokemonController {
     public ResponseEntity<List<Pokemon>> findPokemon(@PathVariable String name) {
         List<Pokemon> pokemons = pokemonService.search(name);
         return ResponseEntity.ok(pokemons);
+    }
+
+    @Secured("ROLE_ADMIN")
+    @GetMapping("/{id}")
+    public ResponseEntity<Pokemon> findById(@PathVariable String id) {
+        Pokemon pokemon = pokemonService.findById(id);
+        return ResponseEntity.ok(pokemon);
     }
 
     @Secured({"ROLE_ADMIN"})
