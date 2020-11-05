@@ -14,7 +14,5 @@ public class PokemonList {
         return results;
     }
 
-    public void setResults(List<PokemonInfo> results) {
-        this.results = results;
-    }
+
 }

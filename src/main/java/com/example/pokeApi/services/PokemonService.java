@@ -68,6 +68,7 @@ public class PokemonService {
         return pokemons;
     }
 
+    @CachePut(value = "pokemonCache", key = "#result.id")
     public Pokemon save(Pokemon pokemon){
         return pokemonRepository.save(pokemon);
     }

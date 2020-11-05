@@ -1,7 +1,4 @@
 package com.example.pokeApi.services;
-
-
-
 import com.example.pokeApi.entities.User;
 import com.example.pokeApi.repositories.PokemonRepository;
 import com.example.pokeApi.repositories.UserRepository;
@@ -14,7 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
@@ -71,7 +67,7 @@ public class UserService {
 
 
 
-
+    @CachePut(value = "userCache", key = "#id")
     public void update(String id, User user) {
         var isAdmin = SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream()
                 .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().toUpperCase().equals("ROLE_ADMIN"));
